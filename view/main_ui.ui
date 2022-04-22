@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>905</width>
     <height>355</height>
    </rect>
   </property>
@@ -58,6 +58,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="previousPushButton">
+            <property name="text">
+             <string>Previous</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="submitPushButton">
             <property name="text">
              <string>Submit</string>
@@ -67,7 +74,7 @@
           <item>
            <widget class="QPushButton" name="createBibliographyButton">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Create Bio</string>
