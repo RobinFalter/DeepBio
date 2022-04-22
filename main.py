@@ -29,10 +29,8 @@ class DeepBibUI(qtw.QMainWindow):
              "What kind of pets do you have, if any? What are their names?",
              "Are you a sports fan? If so, what is your favourite team?",
              "What causes are you passionate about?",
-             "What is your highest level of education?",
-             "Did you go to a college or university? If so, where?",
-             "When did you attend college or university?",
-             "What did you study?",
+            #  "What is your highest level of education?",
+             "Did you attend college? If yes, what and when did you study?"
              "What drew you to your college or university major?",
              "Where did you work?",
              "What other jobs have you had in your career?",
@@ -100,35 +98,67 @@ class DeepBibUI(qtw.QMainWindow):
 
 
     def generate_prompt(self):
-        return f"""Write a biography
-        Name: {self.answer_question_dict['Answers'][0]}
-        Year of birth: {self.answer_question_dict['Answers'][1]}
-        Dream Job: {self.answer_question_dict['Answers'][2]}
-        Resident Adress: {self.answer_question_dict['Answers'][3]}
-        Hobby: {self.answer_question_dict['Answers'][4]}
-        Favorite travel destination: {self.answer_question_dict['Answers'][5]}
-        Married: {self.answer_question_dict['Answers'][5]}
-        Children: {self.answer_question_dict['Answers'][5]}
-        Name of pets: {self.answer_question_dict['Answers'][5]}
-        Favorite sports club: {self.answer_question_dict['Answers'][5]}
-        Passion: {self.answer_question_dict['Answers'][5]}
-        Highest Level of education: {self.answer_question_dict['Answers'][5]}
-        College or University: {self.answer_question_dict['Answers'][5]}
-        College time: {self.answer_question_dict['Answers'][5]}
-        Study subject: {self.answer_question_dict['Answers'][5]}
-        Reason for subject: {self.answer_question_dict['Answers'][5]}
-        Workplaces: {self.answer_question_dict['Answers'][5]}
-        Other jobs in carreer: {self.answer_question_dict['Answers'][5]}
-        Most import accomplishment: {self.answer_question_dict['Answers'][5]}
-        : {self.answer_question_dict['Answers'][5]}
-        Most import accomplishment: {self.answer_question_dict['Answers'][5]}
-        Most import accomplishment: {self.answer_question_dict['Answers'][5]}
-        """
+        prompt = ['Write a biography \n']
+        for question, answer in zip(self.answer_question_dict['Questions'],self.answer_question_dict['Answers']):
+            prompt.append(question + ' : ' + answer + '\n ')
+        ''.join(prompt)
+        return prompt
+
+        # return f"""Write a biography
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
+        # Nickname: {self.answer_question_dict['Answers'][0]}
+        # Year of birth: {self.answer_question_dict['Answers'][1]}
+        # Dream Job: {self.answer_question_dict['Answers'][2]}
+        # Resident Adress: {self.answer_question_dict['Answers'][3]}
+        # Hobby: {self.answer_question_dict['Answers'][4]}
+        # Favorite travel destination: {self.answer_question_dict['Answers'][5]}
+        # Married: {self.answer_question_dict['Answers'][6]}
+        # Children: {self.answer_question_dict['Answers'][7]}
+        # Name of pets: {self.answer_question_dict['Answers'][8]}
+        # Favorite sports club: {self.answer_question_dict['Answers'][9]}
+        # Passion: {self.answer_question_dict['Answers'][10]}
+        # Highest Level of education: {self.answer_question_dict['Answers'][11]}
+        # College or University: {self.answer_question_dict['Answers'][12]}
+        # College time: {self.answer_question_dict['Answers'][13]}
+        # Study subject: {self.answer_question_dict['Answers'][14]}
+        # Reason for subject: {self.answer_question_dict['Answers'][15]}
+        # Workplaces: {self.answer_question_dict['Answers'][16]}
+        # Other jobs in carreer: {self.answer_question_dict['Answers'][17]}
+        # Most import accomplishment: {self.answer_question_dict['Answers'][18]}
+        # Advices to younger self: {self.answer_question_dict['Answers'][19]}
+        # Key to professional success: {self.answer_question_dict['Answers'][20]}
+        # Proud of: {self.answer_question_dict['Answers'][21]}
+        # Greatest adventure: {self.answer_question_dict['Answers'][22]}
+        # """
 
 
 if __name__ == '__main__':
     import sys
-    openai.api_key = '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'
+    openai.api_key = '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'
     app = qtw.QApplication(sys.argv)
     application = DeepBibUI()
     application.show()
