@@ -18,7 +18,6 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.setupUi(self)
         self.answer_question_dict = {
             'Questions': ["What is your name?",
-             "Do you have any nicknames?",
              "When and where were you born? Where did you live?",
              "When you were a child, what did you want to be when you grew up?",
              "What is your favourite hobby?",
@@ -94,7 +93,7 @@ class DeepBibUI(qtw.QMainWindow):
 
 
     def generate_prompt(self):
-        prompt = ['Write a biography \n']
+        prompt = [f'Write a biography about {self.answer_question_dict['Answers'][0]} \n']
         for question, answer in zip(self.answer_question_dict['Questions'],self.answer_question_dict['Answers']):
             prompt.append(question + ' : ' + answer + '\n ')
         ''.join(prompt)
@@ -154,7 +153,7 @@ class DeepBibUI(qtw.QMainWindow):
 
 if __name__ == '__main__':
     import sys
-    openai.api_key = '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'
+    openai.api_key = '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'
     app = qtw.QApplication(sys.argv)
     application = DeepBibUI()
     application.show()
