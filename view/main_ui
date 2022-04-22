@@ -40,9 +40,16 @@
          </layout>
         </widget>
        </item>
-       <item alignment="Qt::AlignRight">
+       <item>
         <widget class="QWidget" name="widget_4" native="true">
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QPushButton" name="SkipPushButton">
+            <property name="text">
+             <string>Skip</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QPushButton" name="recordPushButton">
             <property name="text">
@@ -59,6 +66,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="createBibliographyButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Create Bio</string>
             </property>

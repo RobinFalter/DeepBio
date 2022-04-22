@@ -16,8 +16,8 @@ class DeepBibUI(qtw.QMainWindow):
         super(DeepBibUI,self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.answer_question_dict = {
-            'Questions': ["What is your name?",
+        self.questions = ["What is your name?",
+             "Do you have any nicknames?",
              "When and where were you born? Where did you live?",
              "When you were a child, what did you want to be when you grew up?",
              "What is your favourite hobby?",
@@ -37,9 +37,11 @@ class DeepBibUI(qtw.QMainWindow):
              "What do you think is the key to professional success?",
              "What are the things you are very proud of?",
              "What was your greatest adventure?",
-            ],
-            'Answers': []
-        }
+            ]
+            
+        
+        self.questions_answered = {"Questions":[],"Answers":[]}
+        
         self.question_index = 0
 
 
@@ -47,12 +49,12 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.submitPushButton.clicked.connect(self.submit)
         self.ui.recordPushButton.clicked.connect(self.record)
         self.ui.createBibliographyButton.clicked.connect(self.create_bibliography)
-
-
+        self.ui.SkipPushButton.clicked.connect(self.skip_question)
 
     def submit(self):
         text = self.ui.responseTextEdit.toPlainText()
-        self.answer_question_dict['Answers'].append(text)
+        self.questions_answered['Questions'].append(self.questions[self.question_index])
+        self.questions_answered['Answers'].append(text)
         self.ui.responseTextEdit.setPlainText('')
         
         self.change_question()
@@ -72,14 +74,21 @@ class DeepBibUI(qtw.QMainWindow):
         except Exception as e:
             print(e)
 
-
+    def skip_question(self):
+        self.question_index+=1
+        self.ui.responseTextEdit.setPlainText('')
+        if self.question_index>=len(self.questions):
+            self.ui.questionLabel.setText('Well done you finished all question')
+            return
+        self.ui.questionLabel.setText(self.questions[self.question_index])
+    
     def change_question(self):
         self.question_index+=1
-        if self.question_index>=len(self.answer_question_dict['Questions']):
+        if self.question_index>=len(self.questions):
             self.ui.questionLabel.setText('Well done you finished all question')
             return
             
-        self.ui.questionLabel.setText(self.answer_question_dict['Questions'][self.question_index])
+        self.ui.questionLabel.setText(self.questions[self.question_index])
 
     def create_bibliography(self):
         response = openai.Completion.create(
@@ -93,8 +102,8 @@ class DeepBibUI(qtw.QMainWindow):
 
 
     def generate_prompt(self):
-        prompt = [f'Write a biography about {self.answer_question_dict['Answers'][0]} \n']
-        for question, answer in zip(self.answer_question_dict['Questions'],self.answer_question_dict['Answers']):
+        prompt = ['Write a biography \n']
+        for question, answer in zip(self.questions_answered['Questions'],self.questions_answered['Answers']):
             prompt.append(question + ' : ' + answer + '\n ')
         ''.join(prompt)
         return prompt
@@ -153,7 +162,7 @@ class DeepBibUI(qtw.QMainWindow):
 
 if __name__ == '__main__':
     import sys
-    openai.api_key = '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'
+    openai.api_key = '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'
     app = qtw.QApplication(sys.argv)
     application = DeepBibUI()
     application.show()
