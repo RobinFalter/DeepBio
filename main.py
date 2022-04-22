@@ -19,9 +19,8 @@ class DeepBibUI(qtw.QMainWindow):
         self.answer_question_dict = {
             'Questions': ["What is your name?",
              "Do you have any nicknames?",
-             "When and where were you born?",
+             "When and where were you born? Where did you live?",
              "When you were a child, what did you want to be when you grew up?",
-             "Where have you lived?",
              "What is your favourite hobby?",
              "What is your favourite travel destination? What did you like about that place?",
              "Are you married? If yes, what is your spouse's name?",
@@ -29,11 +28,9 @@ class DeepBibUI(qtw.QMainWindow):
              "What kind of pets do you have, if any? What are their names?",
              "Are you a sports fan? If so, what is your favourite team?",
              "What causes are you passionate about?",
-            #  "What is your highest level of education?",
              "Did you attend college? If yes, what and when did you study?"
              "What drew you to your college or university major?",
              "Where did you work?",
-             "What other jobs have you had in your career?",
              "Why do you like your job?",
              "How would you describe your career in three words?",
              "What professional accomplishment are you most proud of?",
@@ -41,7 +38,6 @@ class DeepBibUI(qtw.QMainWindow):
              "What do you think is the key to professional success?",
              "What are the things you are very proud of?",
              "What was your greatest adventure?",
-             "Anything you would like to add?"
             ],
             'Answers': []
         }
