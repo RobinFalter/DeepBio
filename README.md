@@ -1,6 +1,8 @@
 # DeepBio
 DeepBio is a tool that helps to create biographies for older people. The app creates a biography based on a list of questions with the use of GPT3 from OpenAi. The application was created during the TUM.ai Makeathon in April 2022.
 
+![
+
 # Installation
 Clone the repository and create a new conda environment with: 
  `conda create --name <your env name> python=3.9`
