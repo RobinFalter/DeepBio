@@ -5,12 +5,9 @@ import PyQt5.QtGui as qtg
 import PyQt5.QtWidgets as qtw
 
 import speech_recognition as sr
-import pyaudio
 import pyttsx3
 
 from view.main_ui import Ui_MainWindow
-from model.utils.threads import SpeakTextWorker, Worker
-from flask import Flask, redirect, render_template, request, url_for
 
 
 class DeepBibUI(qtw.QMainWindow):
@@ -159,7 +156,6 @@ class DeepBibUI(qtw.QMainWindow):
                 prompt.append(self.questions_answer_dict['Questions'][key] + ' : ' + self.questions_answer_dict['Answers'][key] + ' ')
         prompt.append('Write a biography ' + str(self.questions_answer_dict['Answers'][0]))
         prompt = ''.join(prompt)
-        print(prompt)
         return prompt
 
     # def create_speak_text_thread(self,text):
@@ -167,12 +163,11 @@ class DeepBibUI(qtw.QMainWindow):
     #     self.threadpool.start(create_speak_text_thread)
 
     def SpeakText(self):
-        print('started')
         text = self.questions_answer_dict['Questions'][self.question_index]
         # Initialize the engine
         engine = pyttsx3.init()
-        #voices = engine.getProperty('voices')
-        #engine.setProperty('voice', voices[0].id)
+        voices = engine.getProperty('voices')
+        engine.setProperty('voice', voices[1].id)
         engine.setProperty("rate", 100)
         engine.setProperty("Volume", 0.7)
         #time.sleep(3)
@@ -192,7 +187,10 @@ class DeepBibUI(qtw.QMainWindow):
 
 if __name__ == '__main__':
     import sys
-    openai.api_key = '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'
+    import json
+    f = open('./config.json')
+    key = json.load(f)
+    openai.api_key = key['api-key']
     app = qtw.QApplication(sys.argv)
     application = DeepBibUI()
     application.show()

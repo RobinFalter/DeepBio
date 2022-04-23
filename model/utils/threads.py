@@ -14,9 +14,6 @@ class Worker(qtc.QRunnable):
     @qtc.pyqtSlot()
     def run(self):
         self.fn(*self.args,**self.kwargs)
-        
-
-
 
 class SpeakTextWorker(qtc.QObject):
     finished = qtc.pyqtSignal()
