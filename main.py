@@ -49,15 +49,16 @@ class DeepBibUI(qtw.QMainWindow):
         # self.questions_answered = {"Questions":[],"Answers":[]}
         
         self.question_index = 0
-        self.threadpool = qtc.QThreadPool()
-        self.threadpool.setMaxThreadCount(self.threadpool.maxThreadCount()-1)
+        # self.threadpool = qtc.QThreadPool()
+        # self.threadpool.setMaxThreadCount(self.threadpool.maxThreadCount()-1)
 
 
 
         # Connect signals to actions
         self.ui.submitPushButton.clicked.connect(self.submit)
         self.ui.recordPushButton.clicked.connect(self.record)
-        self.ui.createBibliographyButton.clicked.connect(self.create_bibliography)
+        self.ui.createBibliographyButton.clicked.connect(self.create_biography)
+
         self.ui.SkipPushButton.clicked.connect(self.skip_question)
         self.ui.previousPushButton.clicked.connect(self.previous_question)
 

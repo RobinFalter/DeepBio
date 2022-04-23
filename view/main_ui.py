@@ -15,6 +15,35 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(905, 355)
+        MainWindow.setStyleSheet("QWidget #centralwidget {\n"
+"    background-color: #0F2333;\n"
+"}\n"
+"\n"
+"QLabel#questionLabel {\n"
+"    color: #FCFCFC;\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    background-color: #E50058;\n"
+"    color: #FCFCFC;\n"
+"    border-radius: 10px;\n"
+"    min-width: 100px;\n"
+"    min-height: 25px;\n"
+"    font: 15px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #FF740F;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color:#FFBE36;\n"
+"}\n"
+"\n"
+"QPlainTextEdit {\n"
+"    background-color: rgb(255,255,255);\n"
+"    border-radius: 10px;\n"
+"}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -24,6 +53,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.questionLabel = QtWidgets.QLabel(self.widget)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.questionLabel.setFont(font)
+        self.questionLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.questionLabel.setObjectName("questionLabel")
         self.horizontalLayout_3.addWidget(self.questionLabel)
         self.verticalLayout.addWidget(self.widget)
@@ -36,6 +69,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_3)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.responseTextEdit = QtWidgets.QPlainTextEdit(self.widget_3)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.responseTextEdit.setFont(font)
         self.responseTextEdit.setObjectName("responseTextEdit")
         self.horizontalLayout_2.addWidget(self.responseTextEdit)
         self.horizontalLayout.addWidget(self.widget_3, 0, QtCore.Qt.AlignBottom)
@@ -44,19 +80,49 @@ class Ui_MainWindow(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget_4)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.SkipPushButton = QtWidgets.QPushButton(self.widget_4)
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.SkipPushButton.setFont(font)
         self.SkipPushButton.setObjectName("SkipPushButton")
         self.verticalLayout_2.addWidget(self.SkipPushButton)
         self.recordPushButton = QtWidgets.QPushButton(self.widget_4)
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.recordPushButton.setFont(font)
         self.recordPushButton.setObjectName("recordPushButton")
         self.verticalLayout_2.addWidget(self.recordPushButton)
         self.previousPushButton = QtWidgets.QPushButton(self.widget_4)
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.previousPushButton.setFont(font)
         self.previousPushButton.setObjectName("previousPushButton")
         self.verticalLayout_2.addWidget(self.previousPushButton)
         self.submitPushButton = QtWidgets.QPushButton(self.widget_4)
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.submitPushButton.setFont(font)
         self.submitPushButton.setObjectName("submitPushButton")
         self.verticalLayout_2.addWidget(self.submitPushButton)
         self.createBibliographyButton = QtWidgets.QPushButton(self.widget_4)
         self.createBibliographyButton.setEnabled(True)
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.createBibliographyButton.setFont(font)
         self.createBibliographyButton.setObjectName("createBibliographyButton")
         self.verticalLayout_2.addWidget(self.createBibliographyButton)
         self.horizontalLayout.addWidget(self.widget_4)

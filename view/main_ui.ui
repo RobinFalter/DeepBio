@@ -13,6 +13,37 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget #centralwidget {
+	background-color: #0F2333;
+}
+
+QLabel#questionLabel {
+	color: #FCFCFC;
+}
+
+QPushButton {
+	background-color: #E50058;
+	color: #FCFCFC;
+	border-radius: 10px;
+    min-width: 100px;
+    min-height: 25px;
+	font: 15px;
+}
+
+QPushButton:hover {
+	background-color: #FF740F;
+}
+
+QPushButton:pressed {
+	background-color:#FFBE36;
+}
+
+QPlainTextEdit {
+	background-color: rgb(255,255,255);
+	border-radius: 10px;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -20,8 +51,16 @@
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="questionLabel">
+         <property name="font">
+          <font>
+           <pointsize>18</pointsize>
+          </font>
+         </property>
          <property name="text">
           <string>What is your name? </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -35,7 +74,13 @@
         <widget class="QWidget" name="widget_3" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QPlainTextEdit" name="responseTextEdit"/>
+           <widget class="QPlainTextEdit" name="responseTextEdit">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -45,6 +90,14 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QPushButton" name="SkipPushButton">
+            <property name="font">
+             <font>
+              <pointsize>-1</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
             <property name="text">
              <string>Skip</string>
             </property>
@@ -52,6 +105,14 @@
           </item>
           <item>
            <widget class="QPushButton" name="recordPushButton">
+            <property name="font">
+             <font>
+              <pointsize>-1</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
             <property name="text">
              <string>Record</string>
             </property>
@@ -59,6 +120,14 @@
           </item>
           <item>
            <widget class="QPushButton" name="previousPushButton">
+            <property name="font">
+             <font>
+              <pointsize>-1</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
             <property name="text">
              <string>Previous</string>
             </property>
@@ -66,6 +135,14 @@
           </item>
           <item>
            <widget class="QPushButton" name="submitPushButton">
+            <property name="font">
+             <font>
+              <pointsize>-1</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
             <property name="text">
              <string>Submit</string>
             </property>
@@ -75,6 +152,14 @@
            <widget class="QPushButton" name="createBibliographyButton">
             <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>-1</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
             </property>
             <property name="text">
              <string>Create Bio</string>
