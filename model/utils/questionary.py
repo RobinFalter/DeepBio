@@ -258,7 +258,7 @@ class QuestionaryPro(Questionary):
                             
     def create_biography(self):
             prompt = self.generate_prompt()
-            action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
+            action = [f"Write a report from the above information"]
             for i in action:
                 prompt += i
                 response = openai.Completion.create(
@@ -301,7 +301,7 @@ class QuestionaryFam(Questionary):
 
     def create_biography(self):
             prompt = self.generate_prompt()
-            action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
+            action = [f"Write a report from the above information"]
             for i in action:
                 prompt += i
                 response = openai.Completion.create(
