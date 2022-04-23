@@ -18,32 +18,36 @@ class DeepBibUI(qtw.QMainWindow):
         super(DeepBibUI,self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setWindowIcon(qtg.QIcon('./view/images/deep_bio.jpeg'))
+        self.setWindowTitle('Deep Bio')
         self.questions_answer_dict = {
             'Questions':["What is your name?",
-             "Which is your gender?",
-             "Do you have any nicknames?",
-             "When and where were you born? Where did you live?",
-             "When you were a child, what did you want to be when you grew up?",
-             "What is your favourite hobby?",
-             "What is your favourite travel destination? What did you like about that place?",
-             "Are you married? If yes, what is your spouse's name?",
-             "Do you have children? What are their names and ages?",
-             "What kind of pets do you have, if any? What are their names?",
-             "Are you a sports fan? If so, what is your favourite team?",
-             "What causes are you passionate about?",
-             "Did you attend college? If yes, what and when did you study?",
-             "What drew you to your college or university major?",
-             "Where did you work?",
-             "Why do you like your job?",
-             "How would you describe your career in three words?",
-             "What professional accomplishment are you most proud of?",
-             "What advice would you give to your younger self?",
-             "What do you think is the key to professional success?",
-             "What are the things you are very proud of?",
-             "What was your greatest adventure?",
+            "What is your gender?",
+            "Do you have any nicknames?",
+            "When and where were you born? Where did you live?",
+            "Are you married? If yes, what is your spouse's name?",
+            "Do you have children? What are their names and ages?",
+            "How did you grow up? Is there a childhood memory that you cherish?",
+            "What is your favourite hobby? What were your favorite hobbies?",
+            "What is your favourite travel destination? What did you like about that place?",
+            "What kind of pets do you have, if any? What are their names?",
+            "Are you a sports fan? If so, what is your favourite team?",
+            "What causes are you passionate about?",
+            "Did you attend college? If yes, what and when did you study?"
+            "What drew you to your college or university major?",
+            "Where did you work?",
+            "Why do you like your job?",
+            "What religion if any do you belong to? Would you describe yourself as being religious?",
+            "What do you like to eat? What don't you like to eat?",
+            "How do you like to dress? Do you have favourite clothes?",
+            "Do you like to be among other people or do you prefer being on your own?",
+            "What are the things you are very proud of?",
+            "What was your greatest adventure?",
+            "Is there anything you would like to add?"
             ],
             'Answers': {}
         }
+
         for key, value in enumerate(self.questions_answer_dict['Questions']):
             self.questions_answer_dict['Answers'][key] = ''
         
@@ -51,10 +55,6 @@ class DeepBibUI(qtw.QMainWindow):
         # self.questions_answered = {"Questions":[],"Answers":[]}
         
         self.question_index = 0
-        self.threadpool = qtc.QThreadPool()
-        self.threadpool.setMaxThreadCount(self.threadpool.maxThreadCount()-1)
-
-
 
         # Connect signals to actions
         self.ui.submitPushButton.clicked.connect(self.submit)
@@ -65,8 +65,6 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.previousPushButton.clicked.connect(self.previous_question)
         self.ui.volumePushButton.clicked.connect(self.SpeakText)
         # self.create_speak_text_thread('Whats your name?')
-
-
 
 
     def submit(self):
@@ -127,16 +125,31 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.questionLabel.setText(self.questions_answer_dict['Questions'][self.question_index])
 
     def create_biography(self):
-        response = openai.Completion.create(
-                    engine="text-davinci-002",
-                    prompt=self.generate_prompt(),
-                    temperature=0,
-                    max_tokens = 300
-                )
-        trunc =  response['choices'][0]['text'].split('\n')[-1]
-        self.ui.responseTextEdit.setPlainText(trunc)
-        self.ui.questionLabel.setText('Your Biography')
+            prompt = self.generate_prompt()
+            action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
+            trunc = ""
+            for i in action:
+                prompt += i
+                response = openai.Completion.create(
+                            engine="text-davinci-002",
+                            prompt= prompt,
+                            temperature=0,
+                            max_tokens = 80
+                        )
+                prompt += response['choices'][0]['text'].split('\n')[-1]
+                trunc +=  response['choices'][0]['text'].split('\n')[-1]
+            self.ui.responseTextEdit.setPlainText(trunc)
 
+    # def create_biography(self):
+    #     response = openai.Completion.create(
+    #                 engine="text-davinci-002",
+    #                 prompt=self.generate_prompt(),
+    #                 temperature=0,
+    #                 max_tokens = 300
+    #             )
+    #     trunc =  response['choices'][0]['text'].split('\n')[-1]
+    #     self.ui.responseTextEdit.setPlainText(trunc)
+    #     self.ui.questionLabel.setText('Your Biography')
 
     def generate_prompt(self):
         prompt = []
@@ -179,7 +192,7 @@ class DeepBibUI(qtw.QMainWindow):
 
 if __name__ == '__main__':
     import sys
-    openai.api_key = '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'
+    openai.api_key = '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'
     app = qtw.QApplication(sys.argv)
     application = DeepBibUI()
     application.show()
