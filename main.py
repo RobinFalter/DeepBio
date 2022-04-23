@@ -29,7 +29,7 @@ class DeepBibUI(qtw.QMainWindow):
              "What kind of pets do you have, if any? What are their names?",
              "Are you a sports fan? If so, what is your favourite team?",
              "What causes are you passionate about?",
-             "Did you attend college? If yes, what and when did you study?"
+             "Did you attend college? If yes, what and when did you study?",
              "What drew you to your college or university major?",
              "Where did you work?",
              "Why do you like your job?",
@@ -45,12 +45,12 @@ class DeepBibUI(qtw.QMainWindow):
         for key, value in enumerate(self.questions_answer_dict['Questions']):
             self.questions_answer_dict['Answers'][key] = ''
         
-            
-            
         
         # self.questions_answered = {"Questions":[],"Answers":[]}
         
         self.question_index = 0
+        self.threadpool = qtc.QThreadPool()
+        self.threadpool.setMaxThreadCount(self.threadpool.maxThreadCount()-1)
 
 
 
@@ -121,7 +121,7 @@ class DeepBibUI(qtw.QMainWindow):
             
         self.ui.questionLabel.setText(self.questions_answer_dict['Questions'][self.question_index])
 
-    def create_bibliography(self):
+    def create_biography(self):
         response = openai.Completion.create(
                     engine="text-davinci-002",
                     prompt=self.generate_prompt(),
@@ -130,6 +130,7 @@ class DeepBibUI(qtw.QMainWindow):
                 )
         trunc =  response['choices'][0]['text'].split('\n')[-1]
         self.ui.responseTextEdit.setPlainText(trunc)
+        self.ui.questionLabel.setText('Your Biography')
 
 
 
@@ -204,7 +205,7 @@ class DeepBibUI(qtw.QMainWindow):
 
 if __name__ == '__main__':
     import sys
-    openai.api_key = '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'
+    openai.api_key = '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'
     app = qtw.QApplication(sys.argv)
     application = DeepBibUI()
     application.show()
