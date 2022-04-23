@@ -14,13 +14,30 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(905, 355)
+        MainWindow.resize(1000, 331)
         MainWindow.setStyleSheet("QWidget #centralwidget {\n"
 "    background-color: #0F2333;\n"
 "}\n"
 "\n"
 "QLabel#questionLabel {\n"
 "    color: #FCFCFC;\n"
+"}\n"
+"\n"
+"QPushButton#volumePushButton {\n"
+"    background-color: #E50058;\n"
+"    color: #FCFCFC;\n"
+"    border-radius: 10px;\n"
+"    min-width: 50px;\n"
+"    min-height: 25px;\n"
+"    font: 15px;\n"
+"}\n"
+"\n"
+"QPushButton#volumePushButton:hover {\n"
+"    background-color: #FF740F;\n"
+"}\n"
+"\n"
+"QPushButton#volumePushButton:pressed {\n"
+"    background-color:#FFBE36;\n"
 "}\n"
 "\n"
 "QPushButton {\n"
@@ -49,6 +66,11 @@ class Ui_MainWindow(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
         self.widget = QtWidgets.QWidget(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy)
         self.widget.setObjectName("widget")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -59,6 +81,24 @@ class Ui_MainWindow(object):
         self.questionLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.questionLabel.setObjectName("questionLabel")
         self.horizontalLayout_3.addWidget(self.questionLabel)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem)
+        self.volumePushButton = QtWidgets.QPushButton(self.widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.volumePushButton.sizePolicy().hasHeightForWidth())
+        self.volumePushButton.setSizePolicy(sizePolicy)
+        self.volumePushButton.setMinimumSize(QtCore.QSize(50, 25))
+        self.volumePushButton.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/view/logos/volume-2.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.volumePushButton.setIcon(icon)
+        self.volumePushButton.setIconSize(QtCore.QSize(21, 21))
+        self.volumePushButton.setObjectName("volumePushButton")
+        self.horizontalLayout_3.addWidget(self.volumePushButton)
+        spacerItem1 = QtWidgets.QSpacerItem(35, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem1)
         self.verticalLayout.addWidget(self.widget)
         self.widget_2 = QtWidgets.QWidget(self.centralwidget)
         self.widget_2.setObjectName("widget_2")
@@ -141,6 +181,7 @@ class Ui_MainWindow(object):
         self.previousPushButton.setText(_translate("MainWindow", "Previous"))
         self.submitPushButton.setText(_translate("MainWindow", "Submit"))
         self.createBibliographyButton.setText(_translate("MainWindow", "Create Bio"))
+import logos_rc_rc
 
 
 if __name__ == "__main__":

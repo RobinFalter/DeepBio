@@ -6,8 +6,10 @@ import PyQt5.QtWidgets as qtw
 
 import speech_recognition as sr
 import pyaudio
+import pyttsx3
 
 from view.main_ui import Ui_MainWindow
+from model.utils.threads import SpeakTextWorker, Worker
 from flask import Flask, redirect, render_template, request, url_for
 
 
@@ -49,8 +51,8 @@ class DeepBibUI(qtw.QMainWindow):
         # self.questions_answered = {"Questions":[],"Answers":[]}
         
         self.question_index = 0
-        # self.threadpool = qtc.QThreadPool()
-        # self.threadpool.setMaxThreadCount(self.threadpool.maxThreadCount()-1)
+        self.threadpool = qtc.QThreadPool()
+        self.threadpool.setMaxThreadCount(self.threadpool.maxThreadCount()-1)
 
 
 
@@ -61,10 +63,11 @@ class DeepBibUI(qtw.QMainWindow):
 
         self.ui.SkipPushButton.clicked.connect(self.skip_question)
         self.ui.previousPushButton.clicked.connect(self.previous_question)
+        self.ui.volumePushButton.clicked.connect(self.SpeakText)
+        # self.create_speak_text_thread('Whats your name?')
 
 
 
-        item = qtw.QTreeWidgetItem()
 
     def submit(self):
         text = self.ui.responseTextEdit.toPlainText()
@@ -97,7 +100,8 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.responseTextEdit.setPlainText('')
         self.questions_answer_dict['Answers'][self.question_index] = ''
         if self.question_index>=len(self.questions_answer_dict['Questions']):
-            self.ui.questionLabel.setText('Well done you finished all question')
+            text = 'Well done you finished all the questions'
+            self.ui.questionLabel.setText(text)
             return
         self.ui.questionLabel.setText(self.questions_answer_dict['Questions'][self.question_index])
 
@@ -134,7 +138,6 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.questionLabel.setText('Your Biography')
 
 
-
     def generate_prompt(self):
         prompt = []
 
@@ -146,62 +149,32 @@ class DeepBibUI(qtw.QMainWindow):
         print(prompt)
         return prompt
 
+    # def create_speak_text_thread(self,text):
+    #     create_speak_text_thread = Worker(self.SpeakText(text))
+    #     self.threadpool.start(create_speak_text_thread)
 
-        # for question, answer in zip(self.questions_answer_dict['Questions'],self.questions_answer_dict['Answers']):
-        #     if not(answer):
-        #         prompt.append(question + ' : ' + answer + '\n ')
-        # ''.join(prompt)
+    def SpeakText(self):
+        print('started')
+        text = self.questions_answer_dict['Questions'][self.question_index]
+        # Initialize the engine
+        engine = pyttsx3.init()
+        #voices = engine.getProperty('voices')
+        #engine.setProperty('voice', voices[0].id)
+        engine.setProperty("rate", 100)
+        engine.setProperty("Volume", 0.7)
+        #time.sleep(3)
+        engine.say(text)
+        engine.runAndWait()
 
-        # return f"""Write a biography
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # {self.answer_question_dict['Questions'][0]}: {self.answer_question_dict['Answers'][0]}
-        # Nickname: {self.answer_question_dict['Answers'][0]}
-        # Year of birth: {self.answer_question_dict['Answers'][1]}
-        # Dream Job: {self.answer_question_dict['Answers'][2]}
-        # Resident Adress: {self.answer_question_dict['Answers'][3]}
-        # Hobby: {self.answer_question_dict['Answers'][4]}
-        # Favorite travel destination: {self.answer_question_dict['Answers'][5]}
-        # Married: {self.answer_question_dict['Answers'][6]}
-        # Children: {self.answer_question_dict['Answers'][7]}
-        # Name of pets: {self.answer_question_dict['Answers'][8]}
-        # Favorite sports club: {self.answer_question_dict['Answers'][9]}
-        # Passion: {self.answer_question_dict['Answers'][10]}
-        # Highest Level of education: {self.answer_question_dict['Answers'][11]}
-        # College or University: {self.answer_question_dict['Answers'][12]}
-        # College time: {self.answer_question_dict['Answers'][13]}
-        # Study subject: {self.answer_question_dict['Answers'][14]}
-        # Reason for subject: {self.answer_question_dict['Answers'][15]}
-        # Workplaces: {self.answer_question_dict['Answers'][16]}
-        # Other jobs in carreer: {self.answer_question_dict['Answers'][17]}
-        # Most import accomplishment: {self.answer_question_dict['Answers'][18]}
-        # Advices to younger self: {self.answer_question_dict['Answers'][19]}
-        # Key to professional success: {self.answer_question_dict['Answers'][20]}
-        # Proud of: {self.answer_question_dict['Answers'][21]}
-        # Greatest adventure: {self.answer_question_dict['Answers'][22]}
-        # """
+        
+        # self.thread = qtc.QThread()
+        # self.worker = SpeakTextWorker()
+        # self.worker.moveToThread(self.thread)
+        # self.thread.started.connect(lambda: self.worker.SpeakText(text))
+        # self.thread.finished.connect(self.thread.quit)
+        # self.thread.finished.connect(self.thread.deleteLater)
+        # self.thread.finished.connect(self.worker.deleteLater)
+        # self.thread.start()
 
 
 if __name__ == '__main__':
