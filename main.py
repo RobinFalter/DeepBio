@@ -17,6 +17,7 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.setupUi(self)
         self.setWindowIcon(qtg.QIcon('./view/images/deep_bio.jpeg'))
         self.setWindowTitle('Deep Bio')
+        self.question_index = 0
         self.questions_answer_dict = {
             'Questions':["What is your name?",
             "What is your gender?",
@@ -47,11 +48,6 @@ class DeepBibUI(qtw.QMainWindow):
 
         for key, value in enumerate(self.questions_answer_dict['Questions']):
             self.questions_answer_dict['Answers'][key] = ''
-        
-        
-        # self.questions_answered = {"Questions":[],"Answers":[]}
-        
-        self.question_index = 0
 
         # Connect signals to actions
         self.ui.submitPushButton.clicked.connect(self.submit)
@@ -62,7 +58,6 @@ class DeepBibUI(qtw.QMainWindow):
         self.ui.previousPushButton.clicked.connect(self.previous_question)
         self.ui.volumePushButton.clicked.connect(self.SpeakText)
         # self.create_speak_text_thread('Whats your name?')
-
 
     def submit(self):
         text = self.ui.responseTextEdit.toPlainText()
@@ -136,6 +131,7 @@ class DeepBibUI(qtw.QMainWindow):
                 prompt += response['choices'][0]['text'].split('\n')[-1]
                 trunc +=  response['choices'][0]['text'].split('\n')[-1]
             self.ui.responseTextEdit.setPlainText(trunc)
+            self.ui.questionLabel.setText('Biography')
 
     # def create_biography(self):
     #     response = openai.Completion.create(
