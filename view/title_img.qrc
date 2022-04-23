@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>images/logo_full.jpeg</file>
+    <file>images/deep_bio.jpeg</file>
+  </qresource>
+</RCC>
