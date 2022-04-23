@@ -23,24 +23,44 @@ class NewMainWindow(qtw.QMainWindow):
         self.pro_window = QuestionaryPro(self.key)
         self.fam_window = QuestionaryFam(self.key)
 
-
         self.ui.bioPushButton.clicked.connect(self.open_bio)
         self.ui.medPushButton.clicked.connect(self.open_med)
         self.ui.proPushButton.clicked.connect(self.open_prof)
         self.ui.famPushButton.clicked.connect(self.open_fam)
 
-
     def open_bio(self):
+        self.check_key()
         self.bio_window.show()
 
     def open_med(self):
+        self.check_key()
         self.med_window.show()
 
     def open_prof(self):
+        self.check_key()
         self.pro_window.show()
 
     def open_fam(self):
+        self.check_key()
         self.fam_window.show()
+
+    def check_key(self):
+        try:
+            response = openai.Completion.create(
+                        engine="text-davinci-002",
+                        prompt= 'Write test',
+                        temperature=0,
+                        max_tokens = 1
+                    )
+        except:
+            msg = qtw.QMessageBox()
+            msg.setIcon(qtw.QMessageBox.Information)
+            msg.setText("Your GPT3 key expired")
+            msg.setInformativeText("Get a new API key from the website")
+            msg.setWindowTitle("Key expired error")
+            msg.setStandardButtons(qtw.QMessageBox.Ok)
+            retval = msg.exec_()
+            quit()
 
 
 if __name__ == '__main__':

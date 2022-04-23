@@ -1,4 +1,3 @@
-
 import os
 import openai
 import PyQt5.QtCore as qtc
@@ -6,6 +5,7 @@ import PyQt5.QtGui as qtg
 import PyQt5.QtWidgets as qtw
 
 import speech_recognition as sr
+from fpdf import FPDF
 import pyttsx3
 
 from view.main_ui import Ui_MainWindow
@@ -19,40 +19,34 @@ class Questionary(qtw.QMainWindow):
         self.setWindowTitle('Deep Bio')
         self.key = key
         self.question_index = 0
+        self.type = ''
+        self.trunc = ""
+        self.submit_shortcut = qtw.QShortcut(qtg.QKeySequence('Ctrl+Return'),self)
 
         # Connect signals to actions
         self.ui.submitPushButton.clicked.connect(self.submit)
+        self.submit_shortcut.activated.connect(self.submit)
         self.ui.recordPushButton.clicked.connect(self.record)
         self.ui.createBibliographyButton.clicked.connect(self.create_biography)
 
         self.ui.SkipPushButton.clicked.connect(self.skip_question)
         self.ui.previousPushButton.clicked.connect(self.previous_question)
         self.ui.volumePushButton.clicked.connect(self.SpeakText)
-        # self.create_speak_text_thread('Whats your name?')
+        self.ui.savePushButton.clicked.connect(self.save)
 
     def submit(self):
         text = self.ui.responseTextEdit.toPlainText()
-        # self.questions_answer_dict['Questions'].append(self.questions[self.question_index])
         self.questions_answer_dict['Answers'][self.question_index] = text
-        # self.questions_answer_dict['Answers'].append(text)
-        # self.questions_answer_dict['Answers'][] 
-        print(self.questions_answer_dict)
         self.ui.responseTextEdit.setPlainText('')
-        
         self.change_question()
-
-
     
     def record(self):
         r = sr.Recognizer()
-
         with sr.Microphone() as source:
-            # r.adjust_for_ambient_noise(source,duration=2)
             audio = r.listen(source)
         try:
             text = r.recognize_google(audio)
             self.ui.responseTextEdit.setPlainText(text)
-            print(text)
         except Exception as e:
             print(e)
 
@@ -70,14 +64,10 @@ class Questionary(qtw.QMainWindow):
         self.question_index-=1
         if self.question_index<0:
             self.question_index = 0
-
-        # for index,item in enumerate(self.questions['Questions']):
-        #     if item 
-
-        # key = self.questions_answer_dict['Questions'] 
         
         self.ui.responseTextEdit.setPlainText(self.questions_answer_dict['Answers'][self.question_index])
         self.ui.questionLabel.setText(self.questions_answer_dict['Questions'][self.question_index])
+        self.ui.savePushButton.setEnabled(False)
     
     def change_question(self):
         self.question_index+=1
@@ -90,7 +80,7 @@ class Questionary(qtw.QMainWindow):
     def create_biography(self):
             prompt = self.generate_prompt()
             action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
-            trunc = ""
+            self.trunc = ""
             for i in action:
                 prompt += i
                 response = openai.Completion.create(
@@ -100,34 +90,20 @@ class Questionary(qtw.QMainWindow):
                             max_tokens = 80
                         )
                 prompt += response['choices'][0]['text'].split('\n')[-1]
-                trunc +=  response['choices'][0]['text'].split('\n')[-1]
-            self.ui.responseTextEdit.setPlainText(trunc)
+                self.trunc +=  response['choices'][0]['text'].split('\n')[-1]
+            self.ui.responseTextEdit.setPlainText(self.trunc)
             self.ui.questionLabel.setText('Biography')
-
-    # def create_biography(self):
-    #     response = openai.Completion.create(
-    #                 engine="text-davinci-002",
-    #                 prompt=self.generate_prompt(),
-    #                 temperature=0,
-    #                 max_tokens = 300
-    #             )
-    #     trunc =  response['choices'][0]['text'].split('\n')[-1]
-    #     self.ui.responseTextEdit.setPlainText(trunc)
-    #     self.ui.questionLabel.setText('Your Biography')
 
     def generate_prompt(self):
         prompt = []
-
         for key, value in self.questions_answer_dict['Answers'].items():
-            # if not(self.questions_answer_dict['Answers'][key]):
-                prompt.append(self.questions_answer_dict['Questions'][key] + ' : ' + self.questions_answer_dict['Answers'][key] + ' ')
+            if self.questions_answer_dict['Answers'][key]!='':
+                prompt.append(self.questions_answer_dict['Questions'][key] + self.questions_answer_dict['Answers'][key] + ' ')
         prompt.append('Write a biography ' + str(self.questions_answer_dict['Answers'][0]))
         prompt = ''.join(prompt)
+        self.ui.savePushButton.setEnabled(True)
+        print(prompt)
         return prompt
-
-    # def create_speak_text_thread(self,text):
-    #     create_speak_text_thread = Worker(self.SpeakText(text))
-    #     self.threadpool.start(create_speak_text_thread)
 
     def SpeakText(self):
         text = self.questions_answer_dict['Questions'][self.question_index]
@@ -141,19 +117,29 @@ class Questionary(qtw.QMainWindow):
         engine.say(text)
         engine.runAndWait()
 
+    def save(self):  
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size = 15)
         
-        # self.thread = qtc.QThread()
-        # self.worker = SpeakTextWorker()
-        # self.worker.moveToThread(self.thread)
-        # self.thread.started.connect(lambda: self.worker.SpeakText(text))
-        # self.thread.finished.connect(self.thread.quit)
-        # self.thread.finished.connect(self.thread.deleteLater)
-        # self.thread.finished.connect(self.worker.deleteLater)
-        # self.thread.start()
+        pdf.cell(200, 10, txt = f"DeepBio: {self.type}", 
+            ln = 1, align = 'C')
+    
+        # add another cell
+        pdf.multi_cell(0,8,txt=self.trunc,align='J')
+        
+    
+        # save the pdf with name .pdf
+        try:
+            pdf.output(f"./output/{self.type}.pdf")   
+            self.ui.questionLabel.setText('Successfully saved')
+        except:
+            print('Error saving pdf file')
 
 class QuestionaryBio(Questionary):
     def __init__(self,key):
         super(QuestionaryBio,self).__init__(key)
+        self.type = 'Biography'
 
         self.questions_answer_dict = {
             'Questions':["What is your name?",
@@ -188,7 +174,7 @@ class QuestionaryBio(Questionary):
     def create_biography(self):
             prompt = self.generate_prompt()
             action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
-            trunc = ""
+            self.trunc = ""
             for i in action:
                 prompt += i
                 response = openai.Completion.create(
@@ -197,17 +183,20 @@ class QuestionaryBio(Questionary):
                             temperature=0,
                             max_tokens = 80
                         )
+                self.ui.questionLabel.setText('Your key expired. Get a new one')
                 prompt += response['choices'][0]['text'].split('\n')[-1]
-                trunc +=  response['choices'][0]['text'].split('\n')[-1]
-            self.ui.responseTextEdit.setPlainText(trunc)
-            self.ui.questionLabel.setText('Biography')
+                self.trunc +=  response['choices'][0]['text'].split('\n')[-1]
+            self.ui.responseTextEdit.setPlainText(self.trunc)
+            self.ui.questionLabel.setText(self.type)
 
 class QuestionaryMed(Questionary):
     def __init__(self,key):
         super(QuestionaryMed,self).__init__(key)
-
+        self.trunc = ""
+        self.type = 'Medical history'
         self.questions_answer_dict = {
-            'Questions':["Have you ever been rushed to the hospital in an ambulance? If Yes, do you remember why?",
+            'Questions':['What is your name?',
+            "Have you ever been rushed to the hospital in an ambulance? If Yes, do you remember why?",
             "Have you ever been treated in an emergency room?",
             "Have you ever had an allergic reaction to food, drug, insect or substance?",
             "Do you carry any medication in case of an emergency?",
@@ -228,8 +217,7 @@ class QuestionaryMed(Questionary):
 
     def create_biography(self):
             prompt = self.generate_prompt()
-            action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
-            trunc = ""
+            action = [f"Write a medical report about {str(self.questions_answer_dict['Answers'][0])}"]
             for i in action:
                 prompt += i
                 response = openai.Completion.create(
@@ -238,16 +226,20 @@ class QuestionaryMed(Questionary):
                             temperature=0,
                             max_tokens = 80
                         )
+                self.ui.questionLabel.setText('Your key expired. Get a new one')
                 prompt += response['choices'][0]['text'].split('\n')[-1]
-                trunc +=  response['choices'][0]['text'].split('\n')[-1]
-            self.ui.responseTextEdit.setPlainText(trunc)
-            self.ui.questionLabel.setText('Biography')
+                self.trunc +=  response['choices'][0]['text'].split('\n')[-1]
+            self.ui.responseTextEdit.setPlainText(self.trunc)
+            self.ui.questionLabel.setText(self.type)
 
 class QuestionaryPro(Questionary):
     def __init__(self,key):
+        self.trunc = ""
+        self.type = 'Profession'
         super(QuestionaryPro,self).__init__(key)
         self.questions_answer_dict = {
-            'Questions':["What do you remember about the place you grew up?",
+            'Questions':["What is your name?",
+            "What do you remember about the place you grew up?",
             "What was your first job?",
             "What was your favourite movie when you were younger?",
             "Which invention from your life are you most amazed by?",
@@ -267,7 +259,6 @@ class QuestionaryPro(Questionary):
     def create_biography(self):
             prompt = self.generate_prompt()
             action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
-            trunc = ""
             for i in action:
                 prompt += i
                 response = openai.Completion.create(
@@ -276,18 +267,20 @@ class QuestionaryPro(Questionary):
                             temperature=0,
                             max_tokens = 80
                         )
+                self.ui.questionLabel.setText('Your key expired. Get a new one')
                 prompt += response['choices'][0]['text'].split('\n')[-1]
-                trunc +=  response['choices'][0]['text'].split('\n')[-1]
-            self.ui.responseTextEdit.setPlainText(trunc)
-            self.ui.questionLabel.setText('Biography')
-
-
+                self.trunc +=  response['choices'][0]['text'].split('\n')[-1]
+            self.ui.responseTextEdit.setPlainText(self.trunc)
+            self.ui.questionLabel.setText(self.type)
 
 class QuestionaryFam(Questionary):
     def __init__(self,key):
+        self.trunc = ""
+        self.type = 'Family memories'
         super(QuestionaryFam,self).__init__(key)
         self.questions_answer_dict = {
-            'Questions':["Do you know the history of your family name, crest, or origin? If yes, would you like to share something?",
+            'Questions':["What is your name?",
+            "Do you know the history of your family name, crest, or origin? If yes, would you like to share something?",
             "What do you remember about your parents and grandparents?",
             "What were your children like growing up? Do they have any funny or embarrassing stories about Mom or Dad?",
             "What did you and your siblings do for fun?",
@@ -309,7 +302,6 @@ class QuestionaryFam(Questionary):
     def create_biography(self):
             prompt = self.generate_prompt()
             action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
-            trunc = ""
             for i in action:
                 prompt += i
                 response = openai.Completion.create(
@@ -318,7 +310,8 @@ class QuestionaryFam(Questionary):
                             temperature=0,
                             max_tokens = 80
                         )
+                self.ui.questionLabel.setText('Your key expired. Get a new one')
                 prompt += response['choices'][0]['text'].split('\n')[-1]
-                trunc +=  response['choices'][0]['text'].split('\n')[-1]
-            self.ui.responseTextEdit.setPlainText(trunc)
-            self.ui.questionLabel.setText('Biography')
+                self.trunc +=  response['choices'][0]['text'].split('\n')[-1]
+            self.ui.responseTextEdit.setPlainText(self.trunc)
+            self.ui.questionLabel.setText(self.type)
