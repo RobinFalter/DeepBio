@@ -1,4 +1,3 @@
-import os
 import openai
 import PyQt5.QtCore as qtc
 import PyQt5.QtGui as qtg

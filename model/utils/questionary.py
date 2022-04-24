@@ -1,4 +1,3 @@
-import os
 import openai
 import PyQt5.QtCore as qtc
 import PyQt5.QtGui as qtg
@@ -114,7 +113,7 @@ class Questionary(qtw.QMainWindow):
         prompt = []
         for key, value in self.questions_answer_dict['Answers'].items():
             if self.questions_answer_dict['Answers'][key]!='':
-                prompt.append(self.questions_answer_dict['Questions'][key] + self.questions_answer_dict['Answers'][key] + ' ')
+                prompt.append(self.questions_answer_dict['Questions'][key] + ':' + self.questions_answer_dict['Answers'][key] + ' ')
         prompt.append('Write a biography ' + str(self.questions_answer_dict['Answers'][0]))
         prompt = ''.join(prompt)
         self.ui.savePushButton.setEnabled(True)
