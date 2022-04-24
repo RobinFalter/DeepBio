@@ -8,7 +8,7 @@ Team Members:
 * Durganshu Mishra
 * Jan-Christopher Michalczik
 
-![Alt text](https://github.com/RobinFalter/DeepBio/blob/main/view/images/Deepbio_gif.gif)
+![Alt text](https://github.com/RobinFalter/DeepBio/blob/main/view/images/Deepbio_gif)
 
 # Installation
 Clone the repository and create a new conda environment with: 
