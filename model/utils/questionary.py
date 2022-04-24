@@ -117,7 +117,6 @@ class Questionary(qtw.QMainWindow):
         prompt.append('Write a biography ' + str(self.questions_answer_dict['Answers'][0]))
         prompt = ''.join(prompt)
         self.ui.savePushButton.setEnabled(True)
-        print(prompt)
         return prompt
 
     def SpeakText(self):
