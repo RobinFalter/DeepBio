@@ -11,6 +11,10 @@ import pyttsx3
 from view.main_ui import Ui_MainWindow
 
 class Questionary(qtw.QMainWindow):
+    '''
+    Questionary class defines functions attributes and functions to handle the questions asking process.
+    Args: key(str) --> valid key to GPT3 OpenAI model
+    '''
     def __init__(self,key):
         super(Questionary,self).__init__()
         self.ui = Ui_MainWindow()
@@ -28,19 +32,20 @@ class Questionary(qtw.QMainWindow):
         self.submit_shortcut.activated.connect(self.submit)
         self.ui.recordPushButton.clicked.connect(self.record)
         self.ui.createBibliographyButton.clicked.connect(self.create_biography)
-
         self.ui.SkipPushButton.clicked.connect(self.skip_question)
         self.ui.previousPushButton.clicked.connect(self.previous_question)
         self.ui.volumePushButton.clicked.connect(self.SpeakText)
         self.ui.savePushButton.clicked.connect(self.save)
 
     def submit(self):
+        '''Functions adds answer to questions_answer_dict'''
         text = self.ui.responseTextEdit.toPlainText()
         self.questions_answer_dict['Answers'][self.question_index] = text
         self.ui.responseTextEdit.setPlainText('')
         self.change_question()
     
     def record(self):
+        '''Speech to text conversion for audio input'''
         r = sr.Recognizer()
         with sr.Microphone() as source:
             audio = r.listen(source)
@@ -51,22 +56,22 @@ class Questionary(qtw.QMainWindow):
             print(e)
 
     def skip_question(self):
+        '''Handles action of skip button'''
         self.question_index+=1
-        self.ui.responseTextEdit.setPlainText('')
-        self.questions_answer_dict['Answers'][self.question_index] = ''
+        self.set_empty_string()
         if self.question_index>=len(self.questions_answer_dict['Questions']):
             text = 'Well done you finished all the questions'
             self.ui.questionLabel.setText(text)
             return
-        self.ui.questionLabel.setText(self.questions_answer_dict['Questions'][self.question_index])
+        self.set_question_lable()
 
     def previous_question(self):
+        '''Navigat to the previous question'''
         self.question_index-=1
         if self.question_index<0:
             self.question_index = 0
-        
-        self.ui.responseTextEdit.setPlainText(self.questions_answer_dict['Answers'][self.question_index])
-        self.ui.questionLabel.setText(self.questions_answer_dict['Questions'][self.question_index])
+        self.set_question_lable()
+        self.set_answer_plain_text()
         self.ui.savePushButton.setEnabled(False)
     
     def change_question(self):
@@ -74,8 +79,19 @@ class Questionary(qtw.QMainWindow):
         if self.question_index>=len(self.questions_answer_dict['Questions']):
             self.ui.questionLabel.setText('Well done you finished all question')
             return
-            
+        if not(self.questions_answer_dict['Answers'][self.question_index]==''):
+            self.set_answer_plain_text()
+        self.set_question_lable()
+
+    def set_answer_plain_text(self):
+        self.ui.responseTextEdit.setPlainText(self.questions_answer_dict['Answers'][self.question_index])
+
+    def set_question_lable(self):
         self.ui.questionLabel.setText(self.questions_answer_dict['Questions'][self.question_index])
+
+    def set_empty_string(self):
+        self.ui.responseTextEdit.setPlainText('')
+        self.questions_answer_dict['Answers'][self.question_index] = ''
 
     def create_biography(self):
             prompt = self.generate_prompt()
@@ -113,7 +129,6 @@ class Questionary(qtw.QMainWindow):
         engine.setProperty('voice', voices[1].id)
         engine.setProperty("rate", 100)
         engine.setProperty("Volume", 0.7)
-        #time.sleep(3)
         engine.say(text)
         engine.runAndWait()
 
@@ -121,26 +136,25 @@ class Questionary(qtw.QMainWindow):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size = 15)
-        
-        pdf.cell(200, 10, txt = f"DeepBio: {self.type}", 
+        pdf.cell(200, 10, txt = f"{self.type}", 
             ln = 1, align = 'C')
-    
-        # add another cell
         pdf.multi_cell(0,8,txt=self.trunc,align='J')
-        
-    
-        # save the pdf with name .pdf
         try:
             pdf.output(f"./output/{self.type}.pdf")   
             self.ui.questionLabel.setText('Successfully saved')
         except:
             print('Error saving pdf file')
 
+    def initialize_dict(self):
+        for key, value in enumerate(self.questions_answer_dict['Questions']):
+                    self.questions_answer_dict['Answers'][key] = ''
+
+
 class QuestionaryBio(Questionary):
+    '''Biography subclass --> defines the questions for the category biograpy'''
     def __init__(self,key):
         super(QuestionaryBio,self).__init__(key)
         self.type = 'Biography'
-
         self.questions_answer_dict = {
             'Questions':["What is your name?",
             "What is your gender?",
@@ -168,8 +182,7 @@ class QuestionaryBio(Questionary):
             ],
             'Answers': {}
         }
-        for key, value in enumerate(self.questions_answer_dict['Questions']):
-                    self.questions_answer_dict['Answers'][key] = ''
+        self.initialize_dict()
 
     def create_biography(self):
             prompt = self.generate_prompt()
@@ -190,6 +203,7 @@ class QuestionaryBio(Questionary):
             self.ui.questionLabel.setText(self.type)
 
 class QuestionaryMed(Questionary):
+    '''Medical history subclass --> defines the questions for the category medical history'''
     def __init__(self,key):
         super(QuestionaryMed,self).__init__(key)
         self.trunc = ""
@@ -211,9 +225,7 @@ class QuestionaryMed(Questionary):
             ],
             'Answers': {}
         }
-
-        for key, value in enumerate(self.questions_answer_dict['Questions']):
-                    self.questions_answer_dict['Answers'][key] = ''
+        self.initialize_dict()
 
     def create_biography(self):
             prompt = self.generate_prompt()
@@ -233,6 +245,7 @@ class QuestionaryMed(Questionary):
             self.ui.questionLabel.setText(self.type)
 
 class QuestionaryPro(Questionary):
+    '''Profession history subclass --> defines the questions for the category profession history'''
     def __init__(self,key):
         self.trunc = ""
         self.type = 'Profession'
@@ -252,10 +265,8 @@ class QuestionaryPro(Questionary):
             ],
             'Answers': {}
         }
+        self.initialize_dict()
 
-        for key, value in enumerate(self.questions_answer_dict['Questions']):
-                    self.questions_answer_dict['Answers'][key] = ''
-                            
     def create_biography(self):
             prompt = self.generate_prompt()
             action = [f"Write a report from the above information"]
@@ -274,6 +285,7 @@ class QuestionaryPro(Questionary):
             self.ui.questionLabel.setText(self.type)
 
 class QuestionaryFam(Questionary):
+    '''Family history subclass --> defines the questions for the category family history'''
     def __init__(self,key):
         self.trunc = ""
         self.type = 'Family memories'
@@ -295,23 +307,21 @@ class QuestionaryFam(Questionary):
             ],
             'Answers': {}
         }
-
-        for key, value in enumerate(self.questions_answer_dict['Questions']):
-                    self.questions_answer_dict['Answers'][key] = ''
+        self.initialize_dict()
 
     def create_biography(self):
-            prompt = self.generate_prompt()
-            action = [f"Write a report from the above information"]
-            for i in action:
-                prompt += i
-                response = openai.Completion.create(
-                            engine="text-davinci-002",
-                            prompt= prompt,
-                            temperature=0,
-                            max_tokens = 80
-                        )
-                self.ui.questionLabel.setText('Your key expired. Get a new one')
-                prompt += response['choices'][0]['text'].split('\n')[-1]
-                self.trunc +=  response['choices'][0]['text'].split('\n')[-1]
+        '''Functions send request to GPT3-API and handles response'''
+        prompt = self.generate_prompt()
+        action = [f"Write a report from the above information"]
+        for i in action:
+            prompt += i
+            response = openai.Completion.create(
+                        engine="text-davinci-002",
+                        prompt= prompt,
+                        temperature=0,
+                        max_tokens = 80
+                    )
+            prompt += response['choices'][0]['text'].split('\n')[-1]
+            self.trunc +=  response['choices'][0]['text'].split('\n')[-1]
             self.ui.responseTextEdit.setPlainText(self.trunc)
             self.ui.questionLabel.setText(self.type)

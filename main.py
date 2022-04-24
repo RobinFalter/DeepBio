@@ -17,6 +17,8 @@ class NewMainWindow(qtw.QMainWindow):
         super(NewMainWindow,self).__init__()
         self.ui = Ui_NewMain()
         self.ui.setupUi(self)
+        self.setWindowIcon(qtg.QIcon('./view/images/deep_bio.jpeg'))
+        self.setWindowTitle('Deep Bio')
         self.key = key
         self.bio_window = QuestionaryBio(self.key)
         self.med_window = QuestionaryMed(self.key)
