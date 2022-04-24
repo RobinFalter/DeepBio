@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NewMain</class>
+ <widget class="QMainWindow" name="NewMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1980</width>
+    <height>1080</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget #centralwidget {
+	background-color: #0F2333;
+}
+
+QLabel#titleLabel {
+	color: #FCFCFC;
+}
+
+QPushButton#volumePushButton {
+	background-color: #E50058;
+	color: #FCFCFC;
+	border-radius: 10px;
+    min-width: 50px;
+    min-height: 25px;
+	font: 15px;
+}
+
+QPushButton#volumePushButton:hover {
+	background-color: #FF740F;
+}
+
+QPushButton#volumePushButton:pressed {
+	background-color:#FFBE36;
+}
+
+QPushButton {
+	background-color: #E50058;
+	color: #FCFCFC;
+	border-radius: 20px;
+    min-width: 100px;
+    min-height: 50px;
+	font: 25px;
+}
+
+QPushButton:hover {
+	background-color: #FF740F;
+}
+
+QPushButton:pressed {
+	background-color:#FFBE36;
+}
+
+QPlainTextEdit {
+	background-color: rgb(255,255,255);
+	border-radius: 10px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="logoLabel">
+         <property name="styleSheet">
+          <string notr="true">image: url(:/newPrefix/images/deep_bio.jpeg);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="titleLabel">
+         <property name="font">
+          <font>
+           <pointsize>40</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>DeepBio</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Maximum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>600</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_3" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QPushButton" name="bioPushButton">
+            <property name="text">
+             <string>Biography</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="medPushButton">
+            <property name="text">
+             <string>Medical History</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="proPushButton">
+            <property name="text">
+             <string>Professional And Life Knowledge</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="famPushButton">
+            <property name="text">
+             <string>Family Memories</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Maximum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>600</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="title_img.qrc"/>
+ </resources>
+ <connections/>
+</ui>
