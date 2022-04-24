@@ -1,5 +1,6 @@
 # DeepBio
 DeepBio is a tool that helps to create biographies for older people. The app creates a biography based on a list of questions with the use of GPT3 from OpenAi. The application was created during the TUM.ai Makeathon in April 2022.
+
 Team Members:
 * Robin Falter
 * Firas Guediri
