@@ -18,3 +18,6 @@ Install the neccessary packages with:
 `pip install -r requirements.txt`
 
 Open the config.json file. Go to https://beta.openai.com/account/api-keys. Copy the key from the website and replace the key in the config.json file. This is neccessary because the key expires after every GitHub commit. 
+
+# Links
+Pitch Deck: https://github.com/RobinFalter/DeepBio/edit/main/README.md
