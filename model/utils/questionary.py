@@ -184,7 +184,7 @@ class QuestionaryBio(Questionary):
 
     def create_biography(self):
             prompt = self.generate_prompt()
-            action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :", f"Add what {str(self.questions_answer_dict['Answers'][0])}  is passionate about", f"Describe {str(self.questions_answer_dict['Answers'][0])} education", f"What does {str(self.questions_answer_dict['Answers'][0])}  like to eat and how does he dress?"]
+            action = [f"Write a biography about {str(self.questions_answer_dict['Answers'][0])} :"]
             self.trunc = ""
             for i in action:
                 prompt += i
@@ -192,7 +192,7 @@ class QuestionaryBio(Questionary):
                             engine="text-davinci-002",
                             prompt= prompt,
                             temperature=0,
-                            max_tokens = 80
+                            max_tokens = 300
                         )
                 self.ui.questionLabel.setText('Your key expired. Get a new one')
                 prompt += response['choices'][0]['text'].split('\n')[-1]
